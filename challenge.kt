@@ -42,6 +42,7 @@ val MobileDeveloperContent = mutableListOf("React","Flutter","Swift")
 val androidDeveloper = Course("Android Developer", 40, Levels.BEGINNER, androidDeveloperContent)
 val UXDesign = Course("UX Designer", 30, Levels.INTERMEDIATE, UXDesignContent)
 val MobileDeveloper = Course("Mobile Developer", 50, Levels.ADVANCED, MobileDeveloperContent)
+val courseList:List<Course> = listOf(androidDeveloper, UXDesign, MobileDeveloper)
 
 // User
 class User(val name:String, val email:String, val password:String) 
@@ -57,7 +58,7 @@ fun addUser() {
     val userpassword = readLine()!!.toString()
     val newUser:User = User(username, useremail, userpassword) 
     userlist.add(newUser)
-    println("New user added: ${newUser.name}")
+    println("New user added: ${newUser.name} \n")
 }
 
 // Verifies if the user has been created already
@@ -67,13 +68,13 @@ fun verifyuser() {
     var userfound:Boolean = false
     for (user in userlist) {
         if (input == user.name) {
-            println("Welcome back $input")
+            println("Welcome back $input \n")
             userfound = true
         }
     }
 
     if (userfound == false) {
-        println("Your username wasn't found, please create a new user:")
+        println("Your username wasn't found, please create a new user: \n")
         addUser()
     }
 }
@@ -98,5 +99,13 @@ fun main() {
 
     verifyInput(yesAction = {addUser()}, noAction =  {verifyuser()})
 
-    println ("Ok! Let's check the courses available!")
+    println ("Ok! Let's check the courses available! \n")
+    for (course in courseList) {
+        println("-- ${course.title} --")
+        println("- Duration: ${course.duration}h")
+        println("- Level: ${course.level}")
+        println("- Content: ${course.content.joinToString()}")
+        println("- Students enrolled: ${course.enrolledStudents} \n")
+        println("")
+    }
 }
