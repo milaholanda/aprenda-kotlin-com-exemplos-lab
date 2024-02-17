@@ -57,6 +57,23 @@ fun addUser() {
     println("New user added: ${newUser.name}")
 }
 
+// Verifies if the user has been create already
+fun verifyuser() {
+    println("What's your username?")
+    var input:String? = readLine()
+    var userfound:Boolean = false
+    for (user in userlist) {
+        if (input == user.name) {
+            println("Welcome back $input")
+            userfound = true
+        }
+    }
+
+    if (userfound == false) {
+        println("Your username wasn't found, please create a new user:")
+        addUser()
+    }
+}
 
 // Main
 fun main() {
@@ -69,7 +86,8 @@ fun main() {
     when {
         input.equals("Y", true) -> addUser()
         input.equals("N", true) -> {
-            println("Ok, what's your username?") // Work on this later
+            println("Ok, what's your username?") 
+            verifyuser()
         }
     }
     //If user answer is invalid, insist on a valid answer
@@ -80,6 +98,7 @@ fun main() {
                 input.equals("Y", true) -> addUser()
                 input.equals("N", true) -> {
                     println("Ok, what's your username?")
+                    verifyuser()
                 }
             }
     }
