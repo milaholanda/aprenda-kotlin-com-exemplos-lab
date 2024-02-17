@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 // Niveis de curso
 enum class Levels {
 	BEGINNER, INTERMEDIATE, ADVANCED    
@@ -45,6 +47,7 @@ val MobileDeveloper = Course("Mobile Developer", 50, Levels.ADVANCED, MobileDeve
 class User(val name:String, val email:String, val password:String) 
 val userlist:MutableList<User> = mutableListOf()
 
+//Adds a new user to the system
 fun addUser() {
     println("Type your username:")
     val username = readLine()!!.toString()
@@ -57,7 +60,7 @@ fun addUser() {
     println("New user added: ${newUser.name}")
 }
 
-// Verifies if the user has been create already
+// Verifies if the user has been created already
 fun verifyuser() {
     println("What's your username?")
     var input:String? = readLine()
@@ -75,31 +78,25 @@ fun verifyuser() {
     }
 }
 
+// verify Input, automatizes the operation of verifying answers
+fun verifyInput(yesAction: () -> Unit, noAction: () -> Unit) {
+    var input = readLine()?.uppercase()
+    while (input !in setOf("Y","N","BREAK")) {
+        println("Type in a valid input")
+        input = readLine()?.uppercase()
+    }
+    when {
+        input.equals("Y", true) -> yesAction()
+        input.equals("N", true) -> noAction()
+        input.equals("BREAK", true) -> exitProcess(0)
+    }
+}
+
 // Main
 fun main() {
     println("Welcome to DIO! Would you like to create a new user? Y for yes, N for no:")
 
-    // Check user
-    var input = readLine()?.uppercase() //gets user answer 
+    verifyInput(yesAction = {addUser()}, noAction =  {verifyuser()})
 
-    //If user answer is valid, execute actions
-    when {
-        input.equals("Y", true) -> addUser()
-        input.equals("N", true) -> {
-            println("Ok, what's your username?") 
-            verifyuser()
-        }
-    }
-    //If user answer is invalid, insist on a valid answer
-    while (input !in setOf("Y","N")) {
-        println("Type a valid answer")
-            input = readLine()?.uppercase()
-            when {
-                input.equals("Y", true) -> addUser()
-                input.equals("N", true) -> {
-                    println("Ok, what's your username?")
-                    verifyuser()
-                }
-            }
-    }
+    println ("Ok! Let's check the courses available!")
 }
