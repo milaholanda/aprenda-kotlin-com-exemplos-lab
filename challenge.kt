@@ -43,6 +43,7 @@ val MobileDeveloper = Course("Mobile Developer", 50, Levels.ADVANCED, MobileDeve
 
 // User
 class User(val name:String, val email:String, val password:String) 
+val userlist:MutableList<User> = mutableListOf()
 
 fun addUser() {
     println("Type your username:")
@@ -51,19 +52,35 @@ fun addUser() {
     val useremail = readLine()!!.toString()
     println("Now type your password:")
     val userpassword = readLine()!!.toString()
-    val newUser = User(username, useremail, userpassword) 
-    println("New user added: $newUser")
+    val newUser:User = User(username, useremail, userpassword) 
+    userlist.add(newUser)
+    println("New user added: ${newUser.name}")
 }
+
 
 // Main
 fun main() {
     println("Welcome to DIO! Would you like to create a new user? Y for yes, N for no:")
-    var input = readLine()
+
+    // Check user
+    var input = readLine()?.uppercase() //gets user answer 
+
+    //If user answer is valid, execute actions
     when {
         input.equals("Y", true) -> addUser()
-        input.equals("N", true) -> println("Ok, what's your username?")
-        else -> {
-            println("Type a valid answer")
+        input.equals("N", true) -> {
+            println("Ok, what's your username?") // Work on this later
         }
+    }
+    //If user answer is invalid, insist on a valid answer
+    while (input !in setOf("Y","N")) {
+        println("Type a valid answer")
+            input = readLine()?.uppercase()
+            when {
+                input.equals("Y", true) -> addUser()
+                input.equals("N", true) -> {
+                    println("Ok, what's your username?")
+                }
+            }
     }
 }
