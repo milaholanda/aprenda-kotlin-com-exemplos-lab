@@ -5,49 +5,6 @@ enum class Levels {
 	BEGINNER, INTERMEDIATE, ADVANCED    
 }
 
-// Classe genérica para os cursos disponíveis.
-class Course (
-    val title:String, 
-    val duration:Int,
-    val level:Levels,
-    val content:MutableList<String>,
-    var enrolledStudents:Int = 0
-) {
-    // adiciona novos conteúdos à ementa da formação
-    fun addContent() {
-        println("Type the new content to be added to the course:")
-        val newContent = readLine()!!.toString()
-        content.add(newContent)
-        println("A nova ementa do curso é $content")
-    }
-
-    val listOfStudents:MutableList<String> = mutableListOf()
-
-    // Matricula de aluno
-    fun addStudent() {
-        println("What's the name of the new student?")
-        val newStudent = readLine()!!.toString()
-        listOfStudents.add(newStudent)
-        enrolledStudents++
-        println("Now there is/are $enrolledStudents students enrolled: $listOfStudents")
-    }
-}
-
-// Conteúdo dos cursos disponíveis
-val androidDeveloperContent = mutableListOf("Java","Kotlin","Android")
-val UXDesignContent = mutableListOf("Figma", "Psychology","Design")
-val MobileDeveloperContent = mutableListOf("React","Flutter","Swift")
-
-// Cursos disponíveis
-val androidDeveloper = Course("Android Developer", 40, Levels.BEGINNER, androidDeveloperContent)
-val UXDesign = Course("UX Designer", 30, Levels.INTERMEDIATE, UXDesignContent)
-val MobileDeveloper = Course("Mobile Developer", 50, Levels.ADVANCED, MobileDeveloperContent)
-val courseList:List<Course> = listOf(androidDeveloper, UXDesign, MobileDeveloper)
-
-// User
-class User(val name:String, val email:String, val password:String) 
-val userlist:MutableList<User> = mutableListOf()
-
 //Adds a new user to the system
 fun addUser() {
     println("Type your username:")
@@ -60,6 +17,77 @@ fun addUser() {
     userlist.add(newUser)
     println("New user added: ${newUser.name} \n")
 }
+
+// Classe genérica para os cursos disponíveis.
+class Course (
+    val title:String, 
+    val duration:Int,
+    val level:Levels,
+    val content:List<String>,
+    var enrolledStudents:Int = 0
+) {
+    val listOfStudents:MutableList<String> = mutableListOf()
+
+    // Matricula de aluno
+    fun addStudent() {
+        val newStudent = userlist.last().name
+        listOfStudents.add(newStudent)
+        enrolledStudents++
+        println("Now there is/are $enrolledStudents students enrolled: $listOfStudents")
+    }
+}
+
+// Conteúdo dos cursos disponíveis
+val androidDeveloperContent = listOf("Java","Kotlin","Android")
+val UXDesignContent = listOf("Figma", "Psychology","Design")
+val MobileDeveloperContent = listOf("React","Flutter","Swift")
+
+// Cursos disponíveis
+val androidDeveloper = Course("Android Developer", 40, Levels.BEGINNER, androidDeveloperContent)
+val UXDesign = Course("UX Designer", 30, Levels.INTERMEDIATE, UXDesignContent)
+val MobileDeveloper = Course("Mobile Developer", 50, Levels.ADVANCED, MobileDeveloperContent)
+val courseList:List<Course> = listOf(androidDeveloper, UXDesign, MobileDeveloper)
+
+// User
+class User(val name:String, val email:String, val password:String) {
+    val enrolledCourses:MutableList<Course> = mutableListOf()
+    
+    fun verifyCourses() {
+        if (enrolledCourses.isEmpty()) {
+            println("You aren't enrolled in any course, would you like to enroll in a course?")
+            verifyInput(yesAction = {
+                println("""Ok, what course would you like to enroll in? Type the correspondent number!
+                1 - Android Developer (Kotlin and Java)
+                2 - UXDesign
+                3 - Mobile Developer (Flutter, React and Swift)""")
+
+                var input = readLine()!!.toInt()
+                while (input !in setOf(1,2,3)) {
+                    println("Type in a valid input")
+                    input = readLine()!!.toInt()
+                }
+                when {
+                    input.equals(1) -> androidDeveloper.addStudent()
+                    input.equals(2) -> UXDesign.addStudent()
+                    input.equals(3) -> MobileDeveloper.addStudent()
+                    input.equals("BREAK") -> exitProcess(0)
+                }
+            }, noAction = {println("ok, see you later o/")})
+        } else {
+            var i = 0
+            for (course in enrolledCourses) {
+                i++
+            }
+            println("You are enrolled in $i courses:")
+            for (course in enrolledCourses) {
+                println("- ${enrolledCourses.last().title}")
+                println("Let's start studying!")
+            }
+        }
+    }
+}
+
+val userlist:MutableList<User> = mutableListOf()
 
 // Verifies if the user has been created already
 fun verifyuser() {
@@ -108,4 +136,6 @@ fun main() {
         println("- Students enrolled: ${course.enrolledStudents} \n")
         println("")
     }
+
+    userlist.last().verifyCourses()
 }
